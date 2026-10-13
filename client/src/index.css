@@ -135,6 +135,7 @@ a:hover { text-decoration: underline; }
 .degree { display: flex; gap: 14px; align-items: flex-start; }
 .degree + .degree { margin-top: 14px; }
 .degree-icon { font-size: 1.6rem; line-height: 1.2; }
+.degree-details { margin: 4px 0 0; font-size: 0.93rem; }
 
 /* ---- Home: stats ---- */
 .stats { margin-bottom: 48px; }

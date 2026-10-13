@@ -34,6 +34,7 @@ export type Education = {
   degree: string
   minor: string | null
   graduated: string | null // free text, e.g. "May 2026"
+  details: string | null // optional sentence, e.g. what a certificate covered
   coursework: string[] // relevant courses, shown on the Résumé page
 }
 

@@ -52,7 +52,7 @@ public sealed class PortfolioService(GitHubClient gitHub, IOptionsMonitor<Portfo
             GitHubUrl: user.HtmlUrl,
             PublicRepos: user.PublicRepos,
             Education: options.Education
-                .Select(e => new Education(e.School, e.Degree, e.Minor, e.Graduated, e.Coursework))
+                .Select(e => new Education(e.School, e.Degree, e.Minor, e.Graduated, e.Details, e.Coursework))
                 .ToList(),
             Links: options.Links
                 .Where(l => !string.IsNullOrWhiteSpace(l.Url))

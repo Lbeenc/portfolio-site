@@ -14,8 +14,10 @@ export default function ResumePage({ profile, projects, resume, loading }: Portf
   if (loading) return <p className="muted">Loading résumé…</p>
   if (!profile || !resume) return null // App already shows the error message
 
-  // Languages you've actually used, most-used first, from your GitHub repos.
-  const languages = countLanguages(projects)
+  // Languages for the Skills section: your own "Languages" group in appsettings.json if
+  // there is one, otherwise the languages counted from your GitHub repos (most-used first).
+  const hasLanguageGroup = resume.skillGroups.some((g) => g.name.toLowerCase() === 'languages')
+  const languages = hasLanguageGroup ? [] : countLanguages(projects)
   const featured = projects.filter((p) => p.featured)
   const awarded = projects.filter((p) => p.award)
 
@@ -98,6 +100,7 @@ export default function ResumePage({ profile, projects, resume, loading }: Portf
                 </div>
                 {e.graduated && <span className="muted resume-dates">{e.graduated}</span>}
               </div>
+              {e.details && <p className="coursework">{e.details}</p>}
               {e.coursework.length > 0 && (
                 <p className="coursework">
                   <span className="muted">Relevant coursework: </span>
@@ -124,7 +127,7 @@ export default function ResumePage({ profile, projects, resume, loading }: Portf
 
       {/* ---- Skills: languages from GitHub, plus the groups from appsettings.json ---- */}
       <section className="resume-section">
-        <h2>Skills</h2>
+        <h2>Technical Skills</h2>
         <dl className="skills">
           {languages.length > 0 && (
             <div className="skill-row">

@@ -55,6 +55,7 @@ public sealed class EducationEntry
     public string Degree { get; set; } = "";   // e.g. "B.S. in Computer Science"
     public string? Minor { get; set; }         // e.g. "Psychology"
     public string? Graduated { get; set; }     // Free text, e.g. "May 2026"
+    public string? Details { get; set; }       // Optional sentence, e.g. what a certificate covered
     public List<string> Coursework { get; set; } = []; // Relevant courses, shown on the Résumé page
 }
 

@@ -40,7 +40,7 @@ public sealed record Profile(
 
 /// <summary>One degree for the Education section.</summary>
 public sealed record Education(
-    string School, string Degree, string? Minor, string? Graduated, IReadOnlyList<string> Coursework);
+    string School, string Degree, string? Minor, string? Graduated, string? Details, IReadOnlyList<string> Coursework);
 
 /// <summary>Everything on the Résumé page that isn't already in the profile or projects.</summary>
 public sealed record Resume(

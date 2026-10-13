@@ -56,8 +56,9 @@ export default function HomePage({ profile, projects, loading }: PortfolioData) 
                 {e.minor && <span className="muted"> · Minor in {e.minor}</span>}
                 <div className="muted">
                   {e.school}
-                  {e.graduated && <> · Graduated {e.graduated}</>}
+                  {e.graduated && <> · {e.graduated}</>}
                 </div>
+                {e.details && <p className="degree-details">{e.details}</p>}
               </div>
             </div>
           ))}
