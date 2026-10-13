@@ -14,10 +14,17 @@ export default function ResumePage({ profile, projects, resume, loading }: Portf
   if (loading) return <p className="muted">Loading résumé…</p>
   if (!profile || !resume) return null // App already shows the error message
 
-  // Languages for the Skills section: your own "Languages" group in appsettings.json if
-  // there is one, otherwise the languages counted from your GitHub repos (most-used first).
-  const hasLanguageGroup = resume.skillGroups.some((g) => g.name.toLowerCase() === 'languages')
-  const languages = hasLanguageGroup ? [] : countLanguages(projects)
+  // Languages for the Skills section. GitHub is the source of truth: languages detected in
+  // your repos come first (most-used first) and stay current automatically. A "Languages"
+  // group in appsettings.json only adds ones GitHub can't see (e.g. SQL, Bash).
+  const isLanguageGroup = (name: string) => name.toLowerCase() === 'languages'
+  const detected = countLanguages(projects).map((l) => l.name)
+  const extras = resume.skillGroups
+    .filter((g) => isLanguageGroup(g.name))
+    .flatMap((g) => g.skills)
+    .filter((skill) => !detected.some((d) => d.toLowerCase() === skill.toLowerCase()))
+  const languages = [...detected, ...extras]
+  const otherSkillGroups = resume.skillGroups.filter((g) => !isLanguageGroup(g.name))
   const featured = projects.filter((p) => p.featured)
   const awarded = projects.filter((p) => p.award)
 
@@ -132,10 +139,10 @@ export default function ResumePage({ profile, projects, resume, loading }: Portf
           {languages.length > 0 && (
             <div className="skill-row">
               <dt>Languages</dt>
-              <dd>{languages.map((l) => l.name).join(', ')}</dd>
+              <dd>{languages.join(', ')}</dd>
             </div>
           )}
-          {resume.skillGroups.map((group) => (
+          {otherSkillGroups.map((group) => (
             <div key={group.name} className="skill-row">
               <dt>{group.name}</dt>
               <dd>{group.skills.join(', ')}</dd>
