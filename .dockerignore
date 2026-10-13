@@ -1,0 +1,12 @@
+# Keep the container build fast and clean: only source goes in, never local
+# build output, dependencies, cached GitHub data, or secrets.
+.git
+**/node_modules
+**/bin
+**/obj
+server/Portfolio.Api/wwwroot
+server/Portfolio.Api/App_Data
+**/*.env
+**/appsettings.*.local.json
+.vs
+.vscode

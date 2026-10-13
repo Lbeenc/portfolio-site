@@ -100,5 +100,59 @@ cd server/Portfolio.Api
 dotnet publish -c Release -o ../../publish
 ```
 
-Deploy the `publish/` folder to any host that runs ASP.NET Core (Azure App Service, a
-Linux VPS, Docker, etc.).
+You can also build a container from the [`Dockerfile`](Dockerfile), which does both steps.
+
+## Deploying to Google Cloud Run (curtisbeen.dev)
+
+Cloud Run builds the `Dockerfile` straight from GitHub, so nothing needs to be installed
+locally. Every push to `main` redeploys the site.
+
+### 1. One-time setup
+
+1. Push this repo to GitHub (public or private both work).
+2. In the [Google Cloud console](https://console.cloud.google.com/), create a project
+   (e.g. `curtis-portfolio`) and turn on billing. The site should stay within Cloud Run's
+   free tier, but Google requires a billing account. Set a budget alert (Billing →
+   Budgets & alerts, e.g. $1) so you hear about any charge.
+3. Create a GitHub token for the server: [fine-grained token](https://github.com/settings/personal-access-tokens/new)
+   with **Public repositories (read-only)** access only.
+4. In the console, open **Secret Manager** → **Create secret**, name it `github-token`,
+   and paste the token as the value.
+
+### 2. Create the service
+
+1. Open **Cloud Run** → **Deploy container** → **Service**, and choose
+   **Continuously deploy from a repository (source or function)**.
+2. **Set up with Cloud Build**: connect GitHub, pick this repo, branch `^main$`, and
+   build type **Dockerfile** (path `/Dockerfile`).
+3. Service settings:
+   - **Region:** `us-central1` (inside the free tier, and it supports custom domains)
+   - **Authentication:** Allow unauthenticated invocations (it's a public website)
+   - **Billing:** Request-based. **Minimum instances:** 0. **Maximum instances:** 2
+     (caps the cost if something unexpected sends heavy traffic)
+   - **Container → Variables & secrets → Reference a secret:** name `GitHub__Token`,
+     secret `github-token`, version `latest`. If it asks, grant the service account the
+     *Secret Manager Secret Accessor* role.
+4. Click **Create**. The first build takes a few minutes. You'll get a URL like
+   `https://portfolio-xxxxx-uc.a.run.app`, so check that the site works there.
+
+### 3. Point curtisbeen.dev at it
+
+1. In Cloud Run, open **Manage custom domains** → **Add mapping**, pick the service,
+   and enter `curtisbeen.dev`. Google asks you to verify you own the domain the first time.
+2. Google shows DNS records (A and AAAA records for the bare domain). Add exactly those
+   at your registrar.
+   - **On Cloudflare**, set each record to **DNS only** (grey cloud), not Proxied.
+     Otherwise Google can't issue the HTTPS certificate.
+3. Wait for the certificate (from 15 minutes to a few hours). `.dev` sites only work over
+   HTTPS, so the domain won't load until the certificate is ready.
+4. Optional: add `www.curtisbeen.dev` as a second mapping (CNAME to `ghs.googlehosted.com`).
+
+### Updating the site
+
+Edit `appsettings.json` or the code, commit, and push to `main`. Cloud Run rebuilds and
+switches over automatically.
+
+Language lookups are saved inside the container. A new deploy starts with an empty
+cache and refetches languages for every repo, about 50 requests. That's well within
+the token's limit of 5,000 an hour.
