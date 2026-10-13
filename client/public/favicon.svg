@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 70">
+  <!-- Green jade neocaridina shrimp favicon, matching src/components/Shrimp.tsx -->
+  <defs>
+    <linearGradient id="jade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9be8b0"/>
+      <stop offset="0.45" stop-color="#3fb36b"/>
+      <stop offset="1" stop-color="#1f7a45"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="#2c8a52" stroke-width="2.4" stroke-linecap="round">
+    <path d="M101 27 C 112 8, 84 -2, 34 6"/>
+    <path d="M102 29 C 118 16, 98 6, 58 13"/>
+  </g>
+  <g stroke="#2f9a5c" stroke-width="2.4" fill="none" stroke-linecap="round">
+    <path d="M90 41 L94 50 L91 58"/>
+    <path d="M82 42 L83 52 L78 59"/>
+    <path d="M74 43 L72 52 L67 58"/>
+  </g>
+  <g fill="#5cc785" stroke="#1f6b40" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M25 52 L5 55 Q3 62 12 64 Z"/>
+    <path d="M29 56 L22 69 Q29 71 33 64 Z"/>
+    <path d="M26 54 L9 65 Q14 71 22 67 Z"/>
+  </g>
+  <path d="M63 21 Q42 15 28 27 Q18 37 22 52 L31 55 Q30 44 37 38 Q47 33 62 42 Z" fill="url(#jade)" stroke="#1f6b40" stroke-width="1.5"/>
+  <path d="M97 26 L117 24 L100 32 Z" fill="#3fb36b" stroke="#1f6b40" stroke-width="1.5"/>
+  <path d="M60 22 Q82 13 100 25 Q105 33 97 40 Q78 47 60 42 Q55 32 60 22 Z" fill="url(#jade)" stroke="#1f6b40" stroke-width="1.5"/>
+  <path d="M30 26 Q48 15 66 19 Q84 15 98 25" fill="none" stroke="#c9f5d6" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="97" cy="29" r="4" fill="#0f2418"/>
+</svg>
