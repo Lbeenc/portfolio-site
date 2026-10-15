@@ -74,7 +74,11 @@ public sealed class PortfolioService(GitHubClient gitHub, IOptionsMonitor<Portfo
             Experience: resume.Experience
                 .Where(e => !string.IsNullOrWhiteSpace(e.Title))
                 .Select(e => new Experience(e.Title, e.Organization, e.Location, e.Start, e.End,
-                    e.Highlights.Where(h => !string.IsNullOrWhiteSpace(h)).ToList()))
+                    NonEmpty(e.Highlights),
+                    e.Projects
+                        .Where(p => !string.IsNullOrWhiteSpace(p.Name))
+                        .Select(p => new ExperienceProject(p.Name, FirstNonEmpty(p.Tech), NonEmpty(p.Highlights)))
+                        .ToList()))
                 .ToList(),
             SkillGroups: resume.SkillGroups
                 .Where(g => g.Skills.Count > 0)
@@ -127,4 +131,8 @@ public sealed class PortfolioService(GitHubClient gitHub, IOptionsMonitor<Portfo
     /// <summary>Returns the first value that isn't null or whitespace, or null if none.</summary>
     private static string? FirstNonEmpty(params string?[] values) =>
         values.FirstOrDefault(v => !string.IsNullOrWhiteSpace(v));
+
+    /// <summary>Drops blank bullet points.</summary>
+    private static List<string> NonEmpty(IEnumerable<string> values) =>
+        values.Where(v => !string.IsNullOrWhiteSpace(v)).ToList();
 }

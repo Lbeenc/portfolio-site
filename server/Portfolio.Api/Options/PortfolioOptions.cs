@@ -90,6 +90,15 @@ public sealed class ExperienceEntry
     public string? Start { get; set; }              // Free text, e.g. "Jun 2025"
     public string? End { get; set; }                // Free text, e.g. "Aug 2025" or "Present"
     public List<string> Highlights { get; set; } = []; // Bullet points: what you did and the impact
+    public List<ExperienceProjectEntry> Projects { get; set; } = []; // Optional sub-projects within the role
+}
+
+/// <summary>A named project within one position, with its own tech list and bullets.</summary>
+public sealed class ExperienceProjectEntry
+{
+    public string Name { get; set; } = "";          // e.g. "Codebase Q&A Tool"
+    public string? Tech { get; set; }               // e.g. "Azure AI Search, RAG, Cursor"
+    public List<string> Highlights { get; set; } = [];
 }
 
 /// <summary>A named list of skills, e.g. { "Name": "Tools", "Skills": ["Git", "Unity"] }.</summary>

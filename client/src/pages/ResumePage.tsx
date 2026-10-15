@@ -88,6 +88,21 @@ export default function ResumePage({ profile, projects, resume, loading }: Portf
                   ))}
                 </ul>
               )}
+              {job.projects.map((project) => (
+                <div key={project.name} className="resume-subitem">
+                  <div className="resume-item-head">
+                    <strong>{project.name}</strong>
+                    {project.tech && <em className="muted resume-tech">{project.tech}</em>}
+                  </div>
+                  {project.highlights.length > 0 && (
+                    <ul>
+                      {project.highlights.map((h) => (
+                        <li key={h}>{h}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
             </div>
           ))}
         </section>

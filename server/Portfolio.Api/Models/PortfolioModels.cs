@@ -51,7 +51,11 @@ public sealed record Resume(
 
 /// <summary>One position on the résumé.</summary>
 public sealed record Experience(
-    string Title, string Organization, string? Location, string? Start, string? End, IReadOnlyList<string> Highlights);
+    string Title, string Organization, string? Location, string? Start, string? End, IReadOnlyList<string> Highlights,
+    IReadOnlyList<ExperienceProject> Projects);
+
+/// <summary>A named project within one position.</summary>
+public sealed record ExperienceProject(string Name, string? Tech, IReadOnlyList<string> Highlights);
 
 /// <summary>A named group of skills, e.g. "Frameworks & Tools".</summary>
 public sealed record SkillGroup(string Name, IReadOnlyList<string> Skills);

@@ -46,6 +46,14 @@ export type Experience = {
   start: string | null // free text, e.g. "Jun 2025"
   end: string | null // free text, e.g. "Present"
   highlights: string[] // bullet points
+  projects: ExperienceProject[] // optional named projects within the role
+}
+
+/** A named project within one position, e.g. "Codebase Q&A Tool". */
+export type ExperienceProject = {
+  name: string
+  tech: string | null // e.g. "Azure AI Search, RAG, Cursor"
+  highlights: string[]
 }
 
 /** A named group of skills, e.g. "Tools". */
