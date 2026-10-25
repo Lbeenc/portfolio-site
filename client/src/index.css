@@ -319,10 +319,18 @@ select option { background: var(--water-deep); }
   to { transform: rotate(18deg); }
 }
 
-/* Respect visitors who turn off animations: no moving bubbles or wagging */
+/* Respect visitors who turn off animations (e.g. Windows "Animation effects" off):
+   no wagging or shimmer, and a calmer tank — every other bubble, rising slowly
+   straight up with no sideways wobble. */
 @media (prefers-reduced-motion: reduce) {
-  .bubble { display: none; }
+  .bubble { animation-name: rise-gently; animation-duration: 30s !important; }
+  .bubble:nth-child(odd) { display: none; }
   .light-rays, .shrimp *, .project-card { animation: none !important; transition: none !important; }
+}
+@keyframes rise-gently {
+  0% { transform: translateY(0); opacity: 0; }
+  10% { opacity: 0.6; }
+  100% { transform: translateY(-110vh); opacity: 0.15; }
 }
 
 /* ---- Phones ---- */

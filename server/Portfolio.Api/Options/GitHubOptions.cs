@@ -17,6 +17,13 @@ public sealed class GitHubOptions
     public List<string> ExtraRepos { get; set; } = [];
 
     /// <summary>
+    /// Also show other people's public repos you recently pushed to or opened pull requests on,
+    /// found in your public GitHub activity. GitHub only keeps about 90 days of activity, so add
+    /// projects you want shown for good to ExtraRepos. Costs 1–3 requests plus 2 per repo found.
+    /// </summary>
+    public bool DiscoverContributions { get; set; } = true;
+
+    /// <summary>
     /// Optional personal access token. Without one, GitHub allows only 60 requests
     /// per hour per IP; with one the limit is 5,000. A token with no scopes at all
     /// (read-only public data) is enough. NEVER commit this value; set it with

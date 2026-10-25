@@ -122,6 +122,17 @@ public sealed class GitHubClient(
                 repos.Add(extra);
         }
 
+        // 2c. Other people's repos you've recently contributed to, from your public activity.
+        if (_options.DiscoverContributions)
+        {
+            foreach (var fullName in await GetRecentContributionsAsync(http, user, ct))
+            {
+                if (repos.Any(r => r.FullName.Equals(fullName, StringComparison.OrdinalIgnoreCase))) continue;
+                var found = await GetJsonAsync<GitHubRepo>(http, $"repos/{fullName}", ct);
+                if (found is { Fork: false }) repos.Add(found);
+            }
+        }
+
         // 3. Language byte counts for each repo. Reuse saved results for repos that haven't
         //    been pushed to since; fetch the rest a few at a time so we don't open dozens
         //    of connections at once.
@@ -157,6 +168,38 @@ public sealed class GitHubClient(
             SaveLanguageCache(cache);
 
         return new GitHubSnapshot(profile, repos, languages, DateTimeOffset.UtcNow, Complete: failedLookups == 0);
+    }
+
+    /// <summary>
+    /// Names ("owner/name") of repos owned by someone else that the user pushed to or opened a
+    /// pull request on, from their public events (GitHub keeps ~90 days, at most 300 events).
+    /// Failures only log: this is a bonus on top of the configured repos, never a reason to fail.
+    /// </summary>
+    private async Task<List<string>> GetRecentContributionsAsync(HttpClient http, string user, CancellationToken ct)
+    {
+        var names = new List<string>();
+        try
+        {
+            for (var page = 1; page <= 3; page++)
+            {
+                var events = await GetJsonAsync<List<GitHubEvent>>(
+                    http, $"users/{user}/events/public?per_page=100&page={page}", ct) ?? [];
+                foreach (var e in events)
+                {
+                    var name = e.Repo.Name;
+                    var isContribution = e.Type is "PushEvent" or "PullRequestEvent";
+                    var isOwnRepo = name.StartsWith(user + "/", StringComparison.OrdinalIgnoreCase);
+                    if (isContribution && !isOwnRepo && !names.Contains(name, StringComparer.OrdinalIgnoreCase))
+                        names.Add(name);
+                }
+                if (events.Count < 100) break;
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            logger.LogWarning("Could not load recent contributions: {Message}", ex.Message);
+        }
+        return names;
     }
 
     /// <summary>Reads saved language lookups from disk; starts empty if there's no usable file.</summary>
@@ -270,6 +313,11 @@ public sealed record GitHubRepo(
     GitHubOwner Owner);
 
 public sealed record GitHubOwner(string Login);
+
+/// <summary>One item from a user's public activity, e.g. a push to a repo.</summary>
+public sealed record GitHubEvent(string Type, GitHubEventRepo Repo);
+
+public sealed record GitHubEventRepo(string Name); // "owner/name"
 
 /// <summary>A saved language lookup and the push time it was taken at.</summary>
 public sealed record CachedLanguages(DateTimeOffset PushedAt, Dictionary<string, long> Languages);
