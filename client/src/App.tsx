@@ -3,6 +3,7 @@ import { usePortfolioData } from './usePortfolioData'
 import HomePage from './pages/HomePage'
 import ProjectsPage from './pages/ProjectsPage'
 import ResumePage from './pages/ResumePage'
+import WebsitesPage from './pages/WebsitesPage'
 import Aquarium from './components/Aquarium'
 import Shrimp from './components/Shrimp'
 
@@ -34,6 +35,7 @@ export default function App() {
               Home
             </NavLink>
             <NavLink to="/projects">Projects</NavLink>
+            <NavLink to="/websites">Websites</NavLink>
             <NavLink to="/resume">Résumé</NavLink>
             {data.profile && (
               <a href={data.profile.gitHubUrl} target="_blank" rel="noreferrer">
@@ -55,6 +57,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage {...data} />} />
           <Route path="/projects" element={<ProjectsPage {...data} />} />
+          <Route path="/websites" element={<WebsitesPage {...data} />} />
           <Route path="/resume" element={<ResumePage {...data} />} />
           <Route path="*" element={<p className="muted">Page not found.</p>} />
         </Routes>

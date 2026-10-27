@@ -36,7 +36,8 @@ public sealed record Profile(
     string GitHubUrl,
     int PublicRepos,
     IReadOnlyList<Education> Education,
-    IReadOnlyList<ProfileLink> Links);
+    IReadOnlyList<ProfileLink> Links,
+    IReadOnlyList<Website> Websites);
 
 /// <summary>One degree for the Education section.</summary>
 public sealed record Education(
@@ -62,3 +63,6 @@ public sealed record SkillGroup(string Name, IReadOnlyList<string> Skills);
 
 /// <summary>A contact link shown on the home page.</summary>
 public sealed record ProfileLink(string Label, string Url);
+
+/// <summary>A live website shown on the Websites page.</summary>
+public sealed record Website(string Name, string Url, string? Description, IReadOnlyList<string> Tech, string? RepoUrl);

@@ -347,7 +347,11 @@ select option { background: var(--water-deep); }
 /* Very small phones: logo only, so the nav links fit on one line */
 @media (max-width: 480px) {
   .brand-name { display: none; }
-  .nav { gap: 0; }
+  /* Tighter links, and if they still don't fit, the nav scrolls instead of the whole page */
+  .nav { gap: 0; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav a { padding: 6px 5px; font-size: 0.85rem; }
+  .header-inner { gap: 8px; }
+  .brand .shrimp { width: 34px; height: auto; }
 }
 
 /* ==========================================================================

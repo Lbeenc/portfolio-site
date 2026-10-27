@@ -28,6 +28,15 @@ export type Project = {
 
 export type ProfileLink = { label: string; url: string }
 
+/** A live website shown on the Websites page. */
+export type Website = {
+  name: string
+  url: string
+  description: string | null
+  tech: string[]
+  repoUrl: string | null
+}
+
 /** One degree, e.g. B.S. in Computer Science from UMSL. */
 export type Education = {
   school: string
@@ -78,6 +87,7 @@ export type Profile = {
   publicRepos: number
   education: Education[]
   links: ProfileLink[]
+  websites: Website[]
 }
 
 /** GETs JSON from the API and throws a readable error if the request fails. */

@@ -25,6 +25,9 @@ public sealed class PortfolioOptions
     /// <summary>Optional contact links (LinkedIn, email, etc.) shown on the home page.</summary>
     public List<ContactLink> Links { get; set; } = [];
 
+    /// <summary>Live websites shown on the Websites page, in order.</summary>
+    public List<WebsiteEntry> Websites { get; set; } = [];
+
     /// <summary>Repo names to leave off the site entirely (case-insensitive).</summary>
     public List<string> HiddenRepos { get; set; } = [];
 
@@ -113,6 +116,16 @@ public sealed class ContactLink
 {
     public string Label { get; set; } = "";
     public string Url { get; set; } = "";
+}
+
+/// <summary>One live website, e.g. { "Name": "Arcane Compositry", "Url": "https://arcanecompositry.com" }.</summary>
+public sealed class WebsiteEntry
+{
+    public string Name { get; set; } = "";
+    public string Url { get; set; } = "";
+    public string? Description { get; set; }
+    public List<string> Tech { get; set; } = [];  // e.g. [ "React", "ASP.NET Core" ]
+    public string? RepoUrl { get; set; }           // Optional link to the source code
 }
 
 /// <summary>Optional replacements for what GitHub reports about a repo.</summary>

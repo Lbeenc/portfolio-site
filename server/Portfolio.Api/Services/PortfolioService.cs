@@ -57,6 +57,10 @@ public sealed class PortfolioService(GitHubClient gitHub, IOptionsMonitor<Portfo
             Links: options.Links
                 .Where(l => !string.IsNullOrWhiteSpace(l.Url))
                 .Select(l => new ProfileLink(l.Label, l.Url))
+                .ToList(),
+            Websites: options.Websites
+                .Where(w => !string.IsNullOrWhiteSpace(w.Name) && !string.IsNullOrWhiteSpace(w.Url))
+                .Select(w => new Website(w.Name, w.Url, FirstNonEmpty(w.Description), w.Tech, FirstNonEmpty(w.RepoUrl)))
                 .ToList());
     }
 
